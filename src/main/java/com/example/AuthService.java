@@ -23,6 +23,10 @@ public class AuthService {
     private static SecureRandom random = new SecureRandom();
     private static Map<String, String> rememberedUsers = new HashMap<>();
 
+    public static boolean isAuthenticated() {
+        return VaadinSession.getCurrent().getAttribute(SESSION_USERNAME) != null;
+    }
+
     public static boolean login(String username, String password) {
         if (username.equals("admin") && password.equals("password")) {
             VaadinSession.getCurrent().setAttribute(SESSION_USERNAME, username);

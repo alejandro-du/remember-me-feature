@@ -1,7 +1,6 @@
 package com.example;
 
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
 /**
@@ -11,8 +10,7 @@ public class VaadinUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        Object username = VaadinSession.getCurrent().getAttribute("username");
-        if (username == null && !AuthService.loginRememberedUser()) {
+        if (!AuthService.isAuthenticated() && !AuthService.loginRememberedUser()) {
             showPublicComponent();
         } else {
             showPrivateComponent();
