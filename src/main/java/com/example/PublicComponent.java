@@ -1,5 +1,6 @@
 package com.example;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 
@@ -9,20 +10,22 @@ import com.vaadin.ui.*;
 public class PublicComponent extends CustomComponent {
 
     public PublicComponent() {
-        LoginForm loginForm = new LoginForm();
-        loginForm.addLoginListener(this::onLogin);
+        TextField username = new TextField("Username");
+        PasswordField password = new PasswordField("Password");
+        Button button = new Button("Login", e -> onLogin(username.getValue(), password.getValue()));
+        button.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-        VerticalLayout layout = new VerticalLayout(loginForm);
+        FormLayout formLayout = new FormLayout(username, password, button);
+        formLayout.setSizeUndefined();
+
+        VerticalLayout layout = new VerticalLayout(formLayout);
         layout.setSizeFull();
-        layout.setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
+        layout.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
         setCompositionRoot(layout);
         setSizeFull();
     }
 
-    private void onLogin(LoginForm.LoginEvent loginEvent) {
-        String username = loginEvent.getLoginParameter("username");
-        String password = loginEvent.getLoginParameter("password");
-
+    private void onLogin(String username, String password) {
         if (Backend.login(username, password)) {
             VaadinUI ui = (VaadinUI) UI.getCurrent();
             VaadinSession.getCurrent().setAttribute("username", username);
@@ -31,6 +34,5 @@ public class PublicComponent extends CustomComponent {
             Notification.show("Invalid credentials (for demo use: admin/password)", Notification.Type.ERROR_MESSAGE);
         }
     }
-
 
 }
