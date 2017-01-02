@@ -1,7 +1,6 @@
 package com.example;
 
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 
 /**
@@ -12,10 +11,11 @@ public class PublicComponent extends CustomComponent {
     public PublicComponent() {
         TextField username = new TextField("Username");
         PasswordField password = new PasswordField("Password");
-        Button button = new Button("Login", e -> onLogin(username.getValue(), password.getValue()));
+        CheckBox rememberMe = new CheckBox("Remember me");
+        Button button = new Button("Login", e -> onLogin(username.getValue(), password.getValue(), rememberMe.getValue()));
         button.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-        FormLayout formLayout = new FormLayout(username, password, button);
+        FormLayout formLayout = new FormLayout(username, password, button, rememberMe);
         formLayout.setSizeUndefined();
 
         VerticalLayout layout = new VerticalLayout(formLayout);
@@ -25,11 +25,15 @@ public class PublicComponent extends CustomComponent {
         setSizeFull();
     }
 
-    private void onLogin(String username, String password) {
-        if (Backend.login(username, password)) {
+    private void onLogin(String username, String password, boolean rememberMe) {
+        if (AuthService.login(username, password)) {
             VaadinUI ui = (VaadinUI) UI.getCurrent();
-            VaadinSession.getCurrent().setAttribute("username", username);
             ui.showPrivateComponent();
+
+            if (rememberMe) {
+                AuthService.rememberUser(username);
+            }
+
         } else {
             Notification.show("Invalid credentials (for demo use: admin/password)", Notification.Type.ERROR_MESSAGE);
         }

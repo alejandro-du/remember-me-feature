@@ -12,7 +12,7 @@ public class VaadinUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         Object username = VaadinSession.getCurrent().getAttribute("username");
-        if (username == null) {
+        if (username == null && !AuthService.loginRememberedUser()) {
             showPublicComponent();
         } else {
             showPrivateComponent();

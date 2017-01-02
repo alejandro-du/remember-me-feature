@@ -25,8 +25,7 @@ public class PrivateComponent extends CustomComponent {
     }
 
     private void onLogout(Button.ClickEvent event) {
-        VaadinSession.getCurrent().close();
-        Page.getCurrent().setLocation("");
+        AuthService.logOut();
     }
 
 }
