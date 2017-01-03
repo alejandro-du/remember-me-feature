@@ -10,7 +10,7 @@ public class VaadinUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        if (!AuthService.isAuthenticated() && !AuthService.loginRememberedUser()) {
+        if (!AuthService.isAuthenticated()) {
             showPublicComponent();
         } else {
             showPrivateComponent();
