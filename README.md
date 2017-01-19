@@ -4,6 +4,8 @@ One of the most common features for a login form is the “remember me” featur
 
 This example application shows how to implement the "remember me" feature with Vaadin.
 
+**You can read the full tutorial at https://vaadin.com/blog/-/blogs/implementing-remember-me-with-vaadin**
+
 # Downloading, compiling, and running the example
 ````
 git clone https://github.com/alejandro-du/remember-me-feature.git
