@@ -1,8 +1,8 @@
 package com.example;
 
-import com.vaadin.server.Page;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinSession;
 
 import javax.servlet.http.Cookie;
 import java.util.Arrays;
@@ -42,12 +42,17 @@ public class AuthService {
         }
 
         VaadinSession.getCurrent().close();
-        Page.getCurrent().setLocation("");
+        UI.getCurrent().navigate("");
+        UI.getCurrent().getPage().executeJavaScript("location.reload();");
     }
 
     private static Optional<Cookie> getRememberMeCookie() {
         Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
-        return Arrays.stream(cookies).filter(c -> c.getName().equals(COOKIE_NAME)).findFirst();
+        if (cookies != null) {
+            return Arrays.stream(cookies).filter(c -> c.getName().equals(COOKIE_NAME)).findFirst();
+        }
+
+        return Optional.empty();
     }
 
     private static boolean loginRememberedUser() {

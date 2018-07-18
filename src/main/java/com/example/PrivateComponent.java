@@ -1,29 +1,26 @@
 package com.example;
 
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.VaadinSession;
 
 /**
  * @author Alejandro Duarte.
  */
-public class PrivateComponent extends CustomComponent {
+public class PrivateComponent extends VerticalLayout {
 
     public PrivateComponent() {
         String username = (String) VaadinSession.getCurrent().getAttribute(AuthService.SESSION_USERNAME);
 
-        Label label = new Label("Welcome, " + username);
-        label.addStyleName(ValoTheme.LABEL_HUGE);
+        H1 label = new H1("Welcome, " + username);
 
-        Button button = new Button("Sign out", this::onLogout);
+        Button button = new Button("Sign out", e -> onLogout());
 
-        setCompositionRoot(new VerticalLayout(label, button));
+        add(label, button);
     }
 
-    private void onLogout(Button.ClickEvent event) {
+    private void onLogout() {
         AuthService.logOut();
     }
 

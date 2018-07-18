@@ -1,12 +1,19 @@
 package com.example;
 
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.*;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * @author Alejandro Duarte.
  */
-public class PublicComponent extends CustomComponent {
+public class PublicComponent extends VerticalLayout {
 
     public PublicComponent() {
         TextField username = new TextField("Username");
@@ -14,28 +21,26 @@ public class PublicComponent extends CustomComponent {
 
         PasswordField password = new PasswordField("Password");
 
-        CheckBox rememberMe = new CheckBox("Remember me");
+        Checkbox rememberMe = new Checkbox("Remember me");
 
         Button button = new Button("Login", e -> onLogin(username.getValue(), password.getValue(), rememberMe.getValue()));
-        button.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+
+        username.addKeyPressListener(Key.ENTER, e -> button.click());
+        password.addKeyPressListener(Key.ENTER, e -> button.click());
 
         FormLayout formLayout = new FormLayout(username, password, button, rememberMe);
         formLayout.setSizeUndefined();
 
-        VerticalLayout layout = new VerticalLayout(formLayout);
-        layout.setSizeFull();
-        layout.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
-
-        setCompositionRoot(layout);
-        setSizeFull();
+        add(formLayout);
+        setHorizontalComponentAlignment(Alignment.CENTER, formLayout);
     }
 
     private void onLogin(String username, String password, boolean rememberMe) {
         if (AuthService.login(username, password, rememberMe)) {
-            VaadinUI ui = (VaadinUI) UI.getCurrent();
+            VaadinUI ui = (VaadinUI) UI.getCurrent().getChildren().findFirst().get();
             ui.showPrivateComponent();
         } else {
-            Notification.show("Invalid credentials (for demo use: admin/password)", Notification.Type.ERROR_MESSAGE);
+            Notification.show("Invalid credentials (for demo use: admin/password)");
         }
     }
 

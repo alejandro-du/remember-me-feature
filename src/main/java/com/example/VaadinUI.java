@@ -1,15 +1,15 @@
 package com.example;
 
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.UI;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.Route;
 
 /**
  * @author Alejandro Duarte.
  */
-public class VaadinUI extends UI {
+@Route("")
+public class VaadinUI extends VerticalLayout {
 
-    @Override
-    protected void init(VaadinRequest vaadinRequest) {
+    public VaadinUI() {
         if (!AuthService.isAuthenticated()) {
             showPublicComponent();
         } else {
@@ -18,11 +18,13 @@ public class VaadinUI extends UI {
     }
 
     public void showPublicComponent() {
-        setContent(new PublicComponent());
+        removeAll();
+        add(new PublicComponent());
     }
 
     public void showPrivateComponent() {
-        setContent(new PrivateComponent());
+        removeAll();
+        add(new PrivateComponent());
     }
 
 }
